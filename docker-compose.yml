@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  app:
+    image: synctree/mediawiki
+    links:
+#      - phpfpm
+      - db:mysql
+    volumes:
+      - MWappD:/var/www/html/
+    ports:
+      - 8080:80
+    environment:
+#      - MEDIAWIKI_DB_HOST=mysql:3306
+      - MEDIAWIKI_DB_USER=mediawiki
+      - MEDIAWIKI_DB_PASSWORD=mediawiki
+      - MEDIAWIKI_DB_NAME=mediawiki
+      
+  db:
+    image: percona
+    ports:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=mediawiki
+      - MYSQL_DATABASE=mediawiki
+      - MYSQL_USER=mediawiki
+      - MYSQL_PASSWORD=mediawiki
+    volumes:
+      - MWDB:/var/lib/mysql
+
+volumes:
+  MWappD:
+    driver: local
+  MWDB:
+    driver: local
